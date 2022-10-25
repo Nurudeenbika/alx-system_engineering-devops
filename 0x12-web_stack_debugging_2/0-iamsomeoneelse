@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Script run whoami command under another user pass as argument
+sudo -H -u "$1" bash -c 'whoami'

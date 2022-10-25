@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Script setup Nginx as nginx user
+sed -i 's/#user www-data;/user nginx;/' /etc/nginx/nginx.conf | chmod 007 /etc/nginx/nginx.conf
+sed -i 's/80/8080/' /etc/nginx/sites-available/default
+pkill -f apache2
+sudo -u nginx service nginx restart

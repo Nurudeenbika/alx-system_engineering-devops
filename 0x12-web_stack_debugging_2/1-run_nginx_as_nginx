@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Script setup nginx web-server for access by nginx user only
+sed -i 's/#user www-data;/user nginx;/' /etc/nginx/nginx.conf
+printf %s "server {
+        listen 8080;
+        listen [::]:8080;
+        root /var/www/html;
+        index index.html index.htm index.nginx-debian.html;
+        server_name _;
+        location / {
+                try_files \$uri \$uri/ =404;
+        }
+}" > /etc/nginx/sites-available/default
+chmod 007 /etc/nginx/nginx.conf
+pkill -f apache2
+sudo -u nginx service nginx restart
