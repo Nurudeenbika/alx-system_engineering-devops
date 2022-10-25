@@ -1,4 +1,4 @@
-
+#
 # rules.before
 #
 # Rules that should be run before the ufw command line added rules. Custom
@@ -7,6 +7,11 @@
 #   ufw-before-output
 #   ufw-before-forward
 #
+*nat
+:PREROUTING ACCEPT [0:0]
+-A PREROUTING -p tcp --dport 8080 -j REDIRECT --to-port 80
+COMMIT
+# End port forwarding
 
 # Don't delete these required lines, otherwise there will be errors
 *filter
@@ -30,7 +35,7 @@
 -A ufw-before-input -m conntrack --ctstate INVALID -j ufw-logging-deny
 -A ufw-before-input -m conntrack --ctstate INVALID -j DROP
 
- ok icmp codes for INPUT
+# ok icmp codes for INPUT
 -A ufw-before-input -p icmp --icmp-type destination-unreachable -j ACCEPT
 -A ufw-before-input -p icmp --icmp-type time-exceeded -j ACCEPT
 -A ufw-before-input -p icmp --icmp-type parameter-problem -j ACCEPT
@@ -56,7 +61,7 @@
 # if MULTICAST, RETURN
 -A ufw-not-local -m addrtype --dst-type MULTICAST -j RETURN
 
- if BROADCAST, RETURN
+# if BROADCAST, RETURN
 -A ufw-not-local -m addrtype --dst-type BROADCAST -j RETURN
 
 # all other non-local packets are dropped
